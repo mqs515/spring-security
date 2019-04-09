@@ -78,6 +78,20 @@ public class SpringSecurityDemoApplicationTests {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
                 .andReturn().getResponse().getContentAsString();
+        System.out.println("============" + contentAsString);
+    }
+
+    @Test
+    public void whenUpdateUserSuccess() throws Exception{
+        Date date = new Date();
+        System.out.println(date.getTime());
+        String content = "{\"id\":\"1\", \"username\":\"张丹\", \"password\":null, \"birthday\":" + date.getTime() + "}";
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.put("/user/updateUser")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(content))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
+                .andReturn().getResponse().getContentAsString();
         System.out.println("==============" + contentAsString);
     }
+
 }

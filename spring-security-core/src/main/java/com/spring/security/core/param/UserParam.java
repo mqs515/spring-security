@@ -1,5 +1,6 @@
 package com.spring.security.core.param;
 
+import com.spring.security.core.validator.MyConst;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -15,8 +16,12 @@ public class UserParam {
 
     private Long id;
 
+    @MyConst(message = "这个是我自定义的注解")
     private String username;
 
+    /**
+     * 使用hibernate的valid校验
+     */
     @NotBlank
     private String password;
 

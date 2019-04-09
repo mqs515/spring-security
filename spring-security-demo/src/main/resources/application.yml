@@ -4,3 +4,5 @@ server:
 spring:
   profiles:
     active: db, browser, demo
+
+api.host: localhost:${server.port}
