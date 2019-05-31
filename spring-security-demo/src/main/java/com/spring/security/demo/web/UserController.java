@@ -2,7 +2,10 @@ package com.spring.security.demo.web;
 
 import com.spring.security.core.dto.UserDTO;
 import com.spring.security.core.enums.ResultErrorEnum;
+import com.spring.security.core.exception.UserNotExistException;
 import com.spring.security.core.param.UserParam;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -21,6 +24,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@Api(tags = "测试User用户")
 public class UserController {
 
     /**
@@ -112,6 +116,20 @@ public class UserController {
         userDTO.setBirthday(param.getBirthday());
         log.info("=========================" + userDTO.toString());
         return userDTO;
+    }
+
+    @DeleteMapping("/deleteUser/{id:\\d+}")
+    public UserDTO deleteUser(@PathVariable String id){
+        log.info("=====================id: " + id);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("tom");
+        return userDTO;
+    }
+
+    @GetMapping("/getInfo/{id:\\d+}")
+    @ApiOperation(value = "测试自定义异常", notes = "测试自定义异常")
+    public UserDTO getInfo(@PathVariable Integer id){
+        throw new UserNotExistException(id);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.spring.security.demo;
 
+import javafx.animation.Animation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -94,4 +95,9 @@ public class SpringSecurityDemoApplicationTests {
         System.out.println("==============" + contentAsString);
     }
 
+    @Test
+    public void whenDeleteSuccess() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.delete("/user/deleteUser/1").contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }
