@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/user")
-@Api(tags = "测试User用户")
+@Api(tags = "用户测试")
 public class UserController {
 
     /**
@@ -32,6 +32,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/getUserList")
+    @ApiOperation(value = "获取用户列表", notes = "获取用户列表")
     public List<UserDTO> getUserList(@RequestParam("username") String nickname){
         ArrayList<UserDTO> list = new ArrayList<>();
         list.add(new UserDTO());
@@ -45,8 +46,9 @@ public class UserController {
      * 添加用户
      * @return
      */
-    @GetMapping("/addUser")
-    public Boolean addUser(UserParam param){
+    @PostMapping("/addUser")
+    @ApiOperation(value = "添加用户", notes = "添加用户")
+    public Boolean addUser(@RequestBody UserParam param){
         // 通过反射获取参数
         System.out.println(ReflectionToStringBuilder.toString(param, ToStringStyle.MULTI_LINE_STYLE));
         return true;
@@ -58,6 +60,7 @@ public class UserController {
      * TODO  :\d+ 代表的是只能添加一个数字
      */
     @GetMapping("/getUserInfo/{id:\\d+}")
+    @ApiOperation(value = "查看用户详情", notes = "查看用户详情")
     public UserDTO getUserInfo(@PathVariable String id){
         log.info("=====================id: " + id);
         UserDTO userDTO = new UserDTO();
@@ -73,6 +76,7 @@ public class UserController {
      * TODO 这个是获取校验结果 ，如果校验结果为错误的则会打印错误
      */
     @PostMapping("/createUser")
+    @ApiOperation(value = "创建用户", notes = "创建用户")
     public UserDTO createUser(@Valid @RequestBody UserParam param, BindingResult errors){
         // 获取校验结果为错误的，并打印错误结果
         if (errors.hasErrors()){
@@ -97,6 +101,7 @@ public class UserController {
      * @return
      */
     @PutMapping("/updateUser")
+    @ApiOperation(value = "修改用户", notes = "修改用户")
     public UserDTO updateUser(@Valid @RequestBody UserParam param, BindingResult errors){
         // 获取校验结果为错误的，并打印错误结果
         if (errors.hasErrors()){
