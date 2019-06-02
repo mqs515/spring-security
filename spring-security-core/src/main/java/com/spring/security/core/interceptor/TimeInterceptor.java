@@ -1,7 +1,8 @@
-package com.spring.security.demo.interceptor;
+package com.spring.security.core.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,9 +29,8 @@ public class TimeInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.info("=======preHandle=================方法执行之前被调用类名: {}", ((HandlerMethod)handler).getBean().getClass().getName());
-        log.info("=======preHandle=================方法执行之前被调用方法名: {}", ((HandlerMethod)handler).getMethod().getName() );
+        log.info("=======preHandle=================方法执行之前被调用方法名: {}", ((HandlerMethod)handler).getMethod().getName()  );
         request.setAttribute("startTime", System.currentTimeMillis());
-
         // 为false 就是不执行请求方法
         return true;
     }
@@ -64,8 +64,10 @@ public class TimeInterceptor implements HandlerInterceptor {
         long startTime = (long)request.getAttribute("startTime");
         log.info("=================afterCompletion===执行耗时： {}", System.currentTimeMillis() - startTime);
         // 打印异常 TODO 有异常postHandle不执行
-        log.info("=================afterCompletion===异常信息： {}", ex.getMessage());
+        if (!ObjectUtils.isEmpty(ex)){
+            log.info("=================afterCompletion===异常信息： {}", ex.getMessage());
 
+        }
 
     }
 }

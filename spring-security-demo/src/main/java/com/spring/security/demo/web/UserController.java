@@ -11,6 +11,7 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -132,9 +133,23 @@ public class UserController {
     }
 
     @GetMapping("/getInfo/{id:\\d+}")
-    @ApiOperation(value = "测试自定义异常", notes = "测试自定义异常")
+    @ApiOperation(value = "测试自定义异常[该异常会被捕获]", notes = "测试自定义异常[该异常会被捕获]")
     public UserDTO getInfo(@PathVariable Integer id){
         throw new UserNotExistException(id);
     }
 
+    @GetMapping("/getRunInfo/{id:\\d+}")
+    @ApiOperation(value = "测试运行时异常", notes = "测试运行时异常")
+    public UserDTO getRunInfo(){
+        throw new RuntimeException("user is not exist ");
+    }
+
+    @GetMapping("/testAspect/{id:\\d+}")
+    @ApiOperation(value = "测试运行时异常", notes = "测试运行时异常")
+    public UserDTO testAspect(@PathVariable Long id){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("tom");
+        userDTO.setId(id);
+        return userDTO;
+    }
 }

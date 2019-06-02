@@ -1,7 +1,7 @@
 package com.spring.security.demo.config;
 
 import com.spring.security.core.filter.TimeFilter;
-import com.spring.security.demo.interceptor.TimeInterceptor;
+import com.spring.security.core.interceptor.TimeInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -18,14 +18,14 @@ import java.util.ArrayList;
  * @Desc 方便加载第三方过滤器
  */
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class   WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private TimeInterceptor timeInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(timeInterceptor);
+        registry.addInterceptor(timeInterceptor).excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }
 
     /**

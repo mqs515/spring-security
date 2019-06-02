@@ -31,7 +31,7 @@ public class TimeFilter implements Filter {
         long startTime = System.currentTimeMillis();
         filterChain.doFilter(servletRequest, servletResponse);
 
-        log.info("===========这个请求的执行时间为：============{}", System.currentTimeMillis() - startTime);
+        log.info("===========filter======这个请求的执行时间为：============{}", System.currentTimeMillis() - startTime);
         log.info("=======================Time Filter Finish");
     }
 
