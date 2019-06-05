@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,6 +69,25 @@ public class AsyncController {
         return result;
     }
 
-
+    /**
+     * TODO    @Async 使用这个注解要配合@EnableAsync一起使用
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/asyncAnna")
+    @ApiOperation(value = " 使用注解异步处理", notes = "使用注解异步处理")
+    @Async
+    public String asyncAnna() throws Exception{
+        log.info("===========主线程=============开始执行");
+        try {
+            // TODO 这个会重新开辟一个线程执行以下的输出方法 10s以后会打印到控制台
+            Thread.sleep(10000);
+            System.out.println("45678909765678");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("===========主线程执行===============结束");
+        return "SUCCESS";
+    }
 
 }

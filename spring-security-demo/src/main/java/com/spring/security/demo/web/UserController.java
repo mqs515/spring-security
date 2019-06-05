@@ -11,7 +11,6 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -152,4 +151,5 @@ public class UserController {
         userDTO.setId(id);
         return userDTO;
     }
+
 }

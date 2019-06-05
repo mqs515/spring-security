@@ -25,4 +25,13 @@ public class UserService {
         list.add(userDTO);
         return list;
     }
+
+    public UserDTO getUserByUserName(String username){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUsername(username);
+        userDTO.setPassword("123456");
+        userDTO.setBirthday(new Date());
+        return userDTO;
+    }
 }

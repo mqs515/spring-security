@@ -1,8 +1,13 @@
-
+#端口号
 server:
   port: 8081
+
 spring:
   profiles:
     active: db, browser, demo
+  #加载静态文件的路径
+  thymeleaf:
+    prefix: /classPath:/static
 
 api.host: localhost:${server.port}
+
