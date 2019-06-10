@@ -7,7 +7,14 @@ spring:
     active: db, browser, demo
   #加载静态文件的路径
   thymeleaf:
-    prefix: /classPath:/static
+    prefix: classPath:/resources/static/
+  # 静态文件请求匹配方式
+  mvc:
+    static-path-pattern: /**
+  # 修改默认的静态寻址资源目录 多个使用逗号分隔
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/static/,,classpath:/resources/,classpath:/static/,classpath:/public/,classpath:/itstyle/
 
 api.host: localhost:${server.port}
+
 

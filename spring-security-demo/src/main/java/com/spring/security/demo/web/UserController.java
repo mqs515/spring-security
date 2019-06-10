@@ -3,6 +3,7 @@ package com.spring.security.demo.web;
 import com.spring.security.core.dto.UserDTO;
 import com.spring.security.core.enums.ResultErrorEnum;
 import com.spring.security.core.exception.UserNotExistException;
+import com.spring.security.core.param.UserLoginParam;
 import com.spring.security.core.param.UserParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,9 +12,11 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -148,6 +151,16 @@ public class UserController {
     public UserDTO testAspect(@PathVariable Long id){
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername("tom");
+        userDTO.setId(id);
+        return userDTO;
+    }
+
+    @GetMapping("/testJrebel")
+    @ApiOperation(value = "测试热部署", notes = "测试热部署")
+    public UserDTO testJrebel(@PathVariable Long id){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("jerky");
+        userDTO.setBirthday(new Date());
         userDTO.setId(id);
         return userDTO;
     }
