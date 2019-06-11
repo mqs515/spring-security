@@ -2,7 +2,6 @@ package com.spring.security.core.validator.code;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.awt.image.BufferedImage;
@@ -14,18 +13,22 @@ import java.time.LocalDateTime;
  * @description：验证码
  */
 @Data
-@AllArgsConstructor
 @ApiModel(value = "ImageCode")
-public class ImageCode {
+public class ImageCode extends ValidateCode {
 
     @ApiModelProperty("图片")
     private BufferedImage image;
 
-    @ApiModelProperty("随机数")
-    private String code;
-
-    @ApiModelProperty("过期时间")
-    private LocalDateTime expireTime;
+    /**
+     * 构造方法
+     * @param image
+     * @param code
+     * @param expireIn
+     */
+    public ImageCode(BufferedImage image, String code, LocalDateTime expireIn){
+        super(code, expireIn);
+        this.image = image;
+    }
 
     /**
      * 多少秒以后过期
@@ -34,13 +37,8 @@ public class ImageCode {
      * @param expireIn
      */
     public ImageCode(BufferedImage image,String code,int expireIn){
+        super(code, expireIn);
         this.image = image;
-        this.code = code;
-        this.expireTime =LocalDateTime.now().plusSeconds(expireIn);
     }
 
-    public Boolean isExpired(){
-        System.out.println("=============过期时间的毫秒数=============" + expireTime);
-        return LocalDateTime.now().isAfter(expireTime);
-    }
 }

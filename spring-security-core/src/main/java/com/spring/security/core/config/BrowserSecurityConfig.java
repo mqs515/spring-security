@@ -3,6 +3,7 @@ package com.spring.security.core.config;
 import com.spring.security.core.authentication.MineAuthenticationFailHandler;
 import com.spring.security.core.authentication.MineAuthenticationSuccessHandler;
 import com.spring.security.core.commons.SecurityProperties;
+import com.spring.security.core.service.MyUserDetailsService;
 import com.spring.security.core.validator.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 /**
  * @author ：miaoqs
@@ -29,11 +34,29 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
+    private DataSource dataSource;
+    @Autowired
     private SecurityProperties securityProperties;
     @Autowired
     private MineAuthenticationSuccessHandler authenticationSuccessHandler;
     @Autowired
     private MineAuthenticationFailHandler authenticationFailHandler;
+    @Autowired
+    private MyUserDetailsService userDetailsService;
+
+    /**
+     * 记住我会将token放入数据库
+     * @return
+     */
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(){
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        // 在启动的时候会自动创建表
+        tokenRepository.setCreateTableOnStartup(true);
+        return tokenRepository;
+    }
+
     /**
      * @param http
      * @throws Exception
@@ -45,26 +68,34 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
         ValidateCodeFilter filter = new ValidateCodeFilter();
         filter.setAuthenticationFailureHandler(authenticationFailHandler);
+
         // 授权的权限配置   TODO formLogin【表单登陆】 这个是页面进行登陆认证    httpBasic 【http方式的登陆】弹窗认证
         //设置登录,注销，表单登录不用拦截，其他请求要拦截
 //        http.httpBasic()
         // 登陆以后直接进入的登陆页面
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin().loginPage("/authentication/require")
-                // 用户登录请求的action
-                .loginProcessingUrl("/authentication/form")
-                .successHandler(authenticationSuccessHandler)
-                .failureHandler(authenticationFailHandler)
+                .formLogin()
+                    .loginPage("/authentication/require")
+                    // 用户登录请求的action
+                    .loginProcessingUrl("/authentication/form")
+                    .successHandler(authenticationSuccessHandler)
+                    .failureHandler(authenticationFailHandler)
+                .and()
+                .rememberMe()
+                    .tokenRepository(persistentTokenRepository())
+                    .tokenValiditySeconds(securityProperties.getBrowsers().getRememberMeSeconds())
+                    .userDetailsService(userDetailsService)
                 .and()
                 // 这个页面不进行拦截
-                .authorizeRequests()
-                .antMatchers("/authentication/require",
-                        securityProperties.getBrowsers().getLoginPage(),
-                        "/code/image").permitAll()
-                .anyRequest().authenticated()
+                    .authorizeRequests()
+                    .antMatchers("/authentication/require",
+                            securityProperties.getBrowsers().getLoginPage(),
+                            "/code/*").permitAll()
+                    .anyRequest().authenticated()
                 .and()
-                .logout().permitAll()
+                    .logout().permitAll()
                 // 关闭默认的csrf认证
-                .and().csrf().disable();
+                .and()
+                    .csrf().disable();
     }
 }

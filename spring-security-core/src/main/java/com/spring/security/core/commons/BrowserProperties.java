@@ -18,4 +18,7 @@ public class BrowserProperties {
 
     @ApiModelProperty("跳转登陆类型")
     private String loginType;
+
+    @ApiModelProperty("记住我记住的秒数")
+    private int rememberMeSeconds;
 }

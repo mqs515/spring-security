@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
@@ -39,7 +38,10 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     private AuthenticationFailureHandler authenticationFailureHandler;
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
-    
+
+    /**
+     * 用来存放要拦截的urls
+     */
     private Set<String> urls = new HashSet<>();
     
     private AntPathMatcher pathMatcher = new AntPathMatcher();
@@ -60,17 +62,8 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
-    	urls.add("/user/1");
-    	urls.add("/user");
-    	urls.add("/api/authentication/form");
-    	
+
     	boolean action = false;
-    	/*for(String url : urls){
-    		if(pathMatcher.match(url, request.getRequestURI())){
-    			action = true;
-    		}
-    	}*/
         System.out.println("==================:" + request.getRequestURI());
     	if(pathMatcher.match("/api/authentication/form", request.getRequestURI())){
 			action = true;

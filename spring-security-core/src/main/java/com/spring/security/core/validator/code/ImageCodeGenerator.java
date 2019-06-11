@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,10 +37,9 @@ public class ImageCodeGenerator implements ValidateCodeGenerator{
 	}
 	
 	private ImageCode createImageCode(HttpServletRequest request){
-        int width = securityProperties.getCode().getImage().getWidth();
-        int height = securityProperties.getCode().getImage().getHeight();
-        int expireIn = securityProperties.getCode().getImage().getExpireIn();
-        log.info("===========生成的验证码的宽度：{},===========生成的验证码的高度：{}, ===========生成的验证码的过期时间：{}", width, height, expireIn);
+        int width = ServletRequestUtils.getIntParameter(request, "width", securityProperties.getCode().getImage().getWidth());
+        int height = ServletRequestUtils.getIntParameter(request, "height", securityProperties.getCode().getImage().getHeight());
+        log.info("===========生成的验证码的宽度：{},===========生成的验证码的高度：{}, ===========生成的验证码的过期时间：{}", width, height);
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -63,7 +63,7 @@ public class ImageCodeGenerator implements ValidateCodeGenerator{
          * 验证码随机数字
          */
         String sRand = "";
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < securityProperties.getCode().getImage().getLength(); i++) {
             List<String> list = Arrays.asList(Conts.IMAGE_CODE.split(","));
             int nextInt = random.nextInt(list.size());
             String rand = list.get(nextInt);
@@ -77,7 +77,7 @@ public class ImageCodeGenerator implements ValidateCodeGenerator{
 
         g.dispose();
 
-        return new ImageCode(image, sRand, expireIn);
+        return new ImageCode(image, sRand, securityProperties.getCode().getImage().getExpireIn());
     }
 	
 	private Color getRandColor(int fc, int bc) {
