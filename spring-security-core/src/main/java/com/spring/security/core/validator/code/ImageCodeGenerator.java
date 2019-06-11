@@ -1,6 +1,10 @@
 package com.spring.security.core.validator.code;
 
+import com.spring.security.core.commons.Conts;
 import com.spring.security.core.commons.SecurityProperties;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -8,6 +12,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -16,17 +22,12 @@ import java.util.Random;
  * @description：注明组件名后autowird的时候调用同名的组件
  */
 @Component("imageCodeGenerator")
+@Slf4j
 public class ImageCodeGenerator implements ValidateCodeGenerator{
 
-	public SecurityProperties getSecurityProperties() {
-		return securityProperties;
-	}
-
-	public void setSecurityProperties(SecurityProperties securityProperties) {
-		this.securityProperties = securityProperties;
-	}
-
 	@Autowired
+    @Getter
+    @Setter
 	private SecurityProperties securityProperties;
 	
 	@Override
@@ -35,8 +36,11 @@ public class ImageCodeGenerator implements ValidateCodeGenerator{
 	}
 	
 	private ImageCode createImageCode(HttpServletRequest request){
-        int width = 67;
-        int height = 23;
+        int width = securityProperties.getCode().getImage().getWidth();
+        int height = securityProperties.getCode().getImage().getHeight();
+        int expireIn = securityProperties.getCode().getImage().getExpireIn();
+        log.info("===========生成的验证码的宽度：{},===========生成的验证码的高度：{}, ===========生成的验证码的过期时间：{}", width, height, expireIn);
+
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         Graphics g = image.getGraphics();
@@ -55,9 +59,17 @@ public class ImageCodeGenerator implements ValidateCodeGenerator{
             g.drawLine(x, y, x + xl, y + yl);
         }
 
+        /**
+         * 验证码随机数字
+         */
         String sRand = "";
         for (int i = 0; i < 4; i++) {
-            String rand = String.valueOf(random.nextInt(10));
+            List<String> list = Arrays.asList(Conts.IMAGE_CODE.split(","));
+            int nextInt = random.nextInt(list.size());
+            String rand = list.get(nextInt);
+            if (nextInt % 2 == 0){
+                rand.toUpperCase();
+            }
             sRand += rand;
             g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110)));
             g.drawString(rand, 13 * i + 6, 16);
@@ -65,7 +77,7 @@ public class ImageCodeGenerator implements ValidateCodeGenerator{
 
         g.dispose();
 
-        return new ImageCode(image, sRand, 3600);
+        return new ImageCode(image, sRand, expireIn);
     }
 	
 	private Color getRandColor(int fc, int bc) {

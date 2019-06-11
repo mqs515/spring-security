@@ -32,9 +32,10 @@ public class MineAuthenticationSuccessHandler extends SavedRequestAwareAuthentic
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         //Authentication接口封装认证信息
         log.info("===============登录成功");
-        if (LoginTypeEnum.JSON.equals(securityProperties.getBrowsers().getLoginType())){
+        if (LoginTypeEnum.JSON.toString().equals(securityProperties.getBrowsers().getLoginType())){
             response.setContentType("application/json;charset=UTF-8");
             //将authentication认证信息转换为json格式的字符串写到response里面去
+            log.info("==========================配置文件跳转类型========================");
             response.getWriter().write(objectMapper.writeValueAsString(authentication));
         }else {
             super.onAuthenticationSuccess(request, response, authentication);

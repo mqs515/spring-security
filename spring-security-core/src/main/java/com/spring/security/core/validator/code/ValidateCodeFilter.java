@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
@@ -65,13 +66,12 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     	urls.add("/api/authentication/form");
     	
     	boolean action = false;
-    	logger.info("================================过滤器请求路径：{}");
-/*    	for(String url : urls){
+    	/*for(String url : urls){
     		if(pathMatcher.match(url, request.getRequestURI())){
     			action = true;
     		}
     	}*/
-    	
+        System.out.println("==================:" + request.getRequestURI());
     	if(pathMatcher.match("/api/authentication/form", request.getRequestURI())){
 			action = true;
 		}
@@ -79,24 +79,22 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 	    if(action){
 			try{
                 validate(new ServletWebRequest(request));
-            }
-            catch(ValidateCodeException e){
+            } catch(ValidateCodeException e){
                 authenticationFailureHandler.onAuthenticationFailure(request, response, e);
                 return;//当失败时则不执行后面的过滤器
             }
-	        
 	    }
 	    
 	    filterChain.doFilter(request, response);
     }
     
-    private void validate(ServletWebRequest request) throws ServletRequestBindingException{
+    private void validate(ServletWebRequest request) throws ValidateCodeException, ServletRequestBindingException{
         
     	//从session中获取生成的图形验证码
     	ImageCode codeInSession = (ImageCode)sessionStrategy.getAttribute(request, Conts.SESSION_KEY);
-        
         //请求中的参数imageCode为登录页面中手填的验证码的值
         String codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");
+        log.info("==============自动生成的验证码：{}, 用户输入的验证码：{}", codeInSession, codeInRequest);
         
         if("".equals(codeInRequest)){
             throw new ValidateCodeException("验证码不能为空");

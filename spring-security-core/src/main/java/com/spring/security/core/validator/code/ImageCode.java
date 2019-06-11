@@ -40,7 +40,7 @@ public class ImageCode {
     }
 
     public Boolean isExpired(){
-        System.out.println(expireTime);
+        System.out.println("=============过期时间的毫秒数=============" + expireTime);
         return LocalDateTime.now().isAfter(expireTime);
     }
 }

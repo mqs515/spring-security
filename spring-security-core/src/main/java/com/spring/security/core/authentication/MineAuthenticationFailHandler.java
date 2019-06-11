@@ -31,13 +31,13 @@ public class MineAuthenticationFailHandler extends SimpleUrlAuthenticationFailur
     @Autowired
     private SecurityProperties securityProperties;
 
-
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         log.info("===============登陆失败");
-        if (LoginTypeEnum.JSON.equals(securityProperties.getBrowsers().getLoginType())){
+        if (LoginTypeEnum.JSON.toString().equals(securityProperties.getBrowsers().getLoginType())){
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setContentType("application/json;charset=UTF-8");
+            log.info("=============================打印异常===========", exception.getMessage());
             response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));
         }else {
             super.onAuthenticationFailure(request, response, exception);

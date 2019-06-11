@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
+/**
+ * @author ：miaoqs
+ * @date ：2019-06-01 17:43
+ * @description：图形验证码
+ */
 
 @Slf4j
 @RestController
@@ -32,10 +37,8 @@ public class ValidatorController {
 	public void createCode(HttpServletRequest request,HttpServletResponse response) throws Exception{
 		//生成图形验证码
 		ImageCode imageCode = imageCodeGenerator.generate(new ServletWebRequest(request));
-		
 		//将图形验证码保存到session中
 		sessionStrategy.setAttribute(new ServletWebRequest(request), Conts.SESSION_KEY, imageCode);
-		
 		//将生成的图形验证码回写到页面上
 		ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
 	}
