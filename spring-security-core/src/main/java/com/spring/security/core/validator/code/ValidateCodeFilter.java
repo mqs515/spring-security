@@ -2,6 +2,9 @@ package com.spring.security.core.validator.code;
 
 import com.spring.security.core.commons.Conts;
 import com.spring.security.core.commons.SecurityProperties;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +30,12 @@ import java.util.Set;
  * @date ：2019-06-10 21:08
  * @description：短信验证码校验过滤器
  */
+@Slf4j
 public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean{
 
+    @Getter
+    @Setter
     private AuthenticationFailureHandler authenticationFailureHandler;
-    
-    public AuthenticationFailureHandler getAuthenticationFailureHandler() {
-        return authenticationFailureHandler;
-    }
-
-    public void setAuthenticationFailureHandler(AuthenticationFailureHandler authenticationFailureHandler) {
-        this.authenticationFailureHandler = authenticationFailureHandler;
-    }
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
     
@@ -55,7 +53,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     	for(String configUrl : configUrls){
     		urls.add(configUrl);
     	}
-    	urls.add("/authentication/form");
+    	urls.add("/api/authentication/form");
     }
     
     @Override
@@ -64,17 +62,17 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         
     	urls.add("/user/1");
     	urls.add("/user");
-    	urls.add("/authentication/form");
+    	urls.add("/api/authentication/form");
     	
     	boolean action = false;
-    	
+    	logger.info("================================过滤器请求路径：{}");
 /*    	for(String url : urls){
     		if(pathMatcher.match(url, request.getRequestURI())){
     			action = true;
     		}
     	}*/
     	
-    	if(pathMatcher.match("/authentication/form", request.getRequestURI())){
+    	if(pathMatcher.match("/api/authentication/form", request.getRequestURI())){
 			action = true;
 		}
     
@@ -117,6 +115,6 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
             throw new ValidateCodeException("验证码不匹配");
         }
         
-        //sessionStrategy.removeAttribute(request, ValidatorController.SESSION_KEY);
+        sessionStrategy.removeAttribute(request, Conts.SESSION_KEY);
     }
 }

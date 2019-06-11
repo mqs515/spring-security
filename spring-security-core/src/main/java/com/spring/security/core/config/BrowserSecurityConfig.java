@@ -3,6 +3,7 @@ package com.spring.security.core.config;
 import com.spring.security.core.authentication.MineAuthenticationFailHandler;
 import com.spring.security.core.authentication.MineAuthenticationSuccessHandler;
 import com.spring.security.core.commons.SecurityProperties;
+import com.spring.security.core.validator.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @author ：miaoqs
@@ -40,11 +42,15 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        ValidateCodeFilter filter = new ValidateCodeFilter();
+        filter.setAuthenticationFailureHandler(authenticationFailHandler);
         // 授权的权限配置   TODO formLogin【表单登陆】 这个是页面进行登陆认证    httpBasic 【http方式的登陆】弹窗认证
         //设置登录,注销，表单登录不用拦截，其他请求要拦截
 //        http.httpBasic()
         // 登陆以后直接进入的登陆页面
-        http.formLogin().loginPage("/authentication/require")
+        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin().loginPage("/authentication/require")
                 // 用户登录请求的action
                 .loginProcessingUrl("/authentication/form")
                 .successHandler(authenticationSuccessHandler)
@@ -52,7 +58,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 这个页面不进行拦截
                 .authorizeRequests()
-                .antMatchers("/authentication/require", securityProperties.getBrowsers().getLoginPage()).permitAll()
+                .antMatchers("/authentication/require",
+                        securityProperties.getBrowsers().getLoginPage(),
+                        "/code/image").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .logout().permitAll()
