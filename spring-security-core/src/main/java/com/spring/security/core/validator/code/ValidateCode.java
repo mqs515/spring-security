@@ -34,8 +34,7 @@ public class ValidateCode {
         this.expireTime =LocalDateTime.now().plusSeconds(expireIn);
     }
 
-    public Boolean isExpired(){
-        System.out.println("=============过期时间的毫秒数=============" + expireTime);
+    public boolean isExpried() {
         return LocalDateTime.now().isAfter(expireTime);
     }
 }

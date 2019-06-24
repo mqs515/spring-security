@@ -14,7 +14,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * @date ：2019-06-10 21:08
  * @description：短信验证码
  */
-@Component("SmsCodeGenerator")
+@Component("smsValidateCodeGenerator")
 @Slf4j
 public class SmsCodeGenerator implements ValidateCodeGenerator{
 
@@ -26,6 +26,7 @@ public class SmsCodeGenerator implements ValidateCodeGenerator{
 	@Override
 	public ValidateCode generate(ServletWebRequest request) {
         String code = RandomStringUtils.randomNumeric(securityProperties.getCode().getSms().getLength());
+        log.info("==============短信验证码============  {}", code);
         return new ValidateCode(code, securityProperties.getCode().getSms().getExpireIn());
     }
 

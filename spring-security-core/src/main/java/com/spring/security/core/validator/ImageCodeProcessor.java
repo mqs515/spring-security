@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
  * @date ：2019-06-11 20:49
  * @description：图片验证码处理器
  */
-@Component("imageCodeProcessor")
+@Component("imageValidateCodeProcessor")
 public class ImageCodeProcessor extends AbstractValidateCodeProcessor<ImageCode> {
 
     /**

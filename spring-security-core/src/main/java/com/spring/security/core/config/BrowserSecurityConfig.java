@@ -1,11 +1,13 @@
 package com.spring.security.core.config;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.spring.security.core.authentication.MineAuthenticationFailHandler;
 import com.spring.security.core.authentication.MineAuthenticationSuccessHandler;
 import com.spring.security.core.commons.SecurityProperties;
 import com.spring.security.core.service.MyUserDetailsService;
 import com.spring.security.core.validator.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,8 +36,6 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    private DataSource dataSource;
-    @Autowired
     private SecurityProperties securityProperties;
     @Autowired
     private MineAuthenticationSuccessHandler authenticationSuccessHandler;
@@ -43,6 +43,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     private MineAuthenticationFailHandler authenticationFailHandler;
     @Autowired
     private MyUserDetailsService userDetailsService;
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * 记住我会将token放入数据库
@@ -52,8 +54,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     public PersistentTokenRepository persistentTokenRepository(){
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
-        // 在启动的时候会自动创建表
-        tokenRepository.setCreateTableOnStartup(true);
+        // 在启动的时候会自动创建表【第一次启动的时候会自动创建表，之后就不用创建表了，可以注销掉】
+//        tokenRepository.setCreateTableOnStartup(true);
         return tokenRepository;
     }
 

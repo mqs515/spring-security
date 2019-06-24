@@ -1,6 +1,6 @@
 package com.spring.security.core.validator.code;
 
-import com.spring.security.core.commons.Conts;
+import com.spring.security.core.commons.SecurityConstants;
 import com.spring.security.core.commons.SecurityProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +22,7 @@ import java.util.Random;
  * @date ：2019-06-10 21:08
  * @description：注明组件名后autowird的时候调用同名的组件
  */
-@Component("imageCodeGenerator")
+@Component("imageValidateCodeGenerator")
 @Slf4j
 public class ImageCodeGenerator implements ValidateCodeGenerator{
 
@@ -39,7 +39,7 @@ public class ImageCodeGenerator implements ValidateCodeGenerator{
 	private ImageCode createImageCode(HttpServletRequest request){
         int width = ServletRequestUtils.getIntParameter(request, "width", securityProperties.getCode().getImage().getWidth());
         int height = ServletRequestUtils.getIntParameter(request, "height", securityProperties.getCode().getImage().getHeight());
-        log.info("===========生成的验证码的宽度：{},===========生成的验证码的高度：{}, ===========生成的验证码的过期时间：{}", width, height);
+        log.info("===========生成的验证码的宽度：{},===========生成的验证码的高度：{}", width, height);
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -64,7 +64,7 @@ public class ImageCodeGenerator implements ValidateCodeGenerator{
          */
         String sRand = "";
         for (int i = 0; i < securityProperties.getCode().getImage().getLength(); i++) {
-            List<String> list = Arrays.asList(Conts.IMAGE_CODE.split(","));
+            List<String> list = Arrays.asList(SecurityConstants.IMAGE_CODE.split(","));
             int nextInt = random.nextInt(list.size());
             String rand = list.get(nextInt);
             if (nextInt % 2 == 0){
@@ -76,7 +76,7 @@ public class ImageCodeGenerator implements ValidateCodeGenerator{
         }
 
         g.dispose();
-
+        log.info("===================图片验证码====================== {}", sRand );
         return new ImageCode(image, sRand, securityProperties.getCode().getImage().getExpireIn());
     }
 	
