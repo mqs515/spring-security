@@ -17,7 +17,6 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = MyConstraintValidator.class)
 public @interface MyConst {
 
-
     String message() default "{javax.validation.constraints.NotBlank.message}";
 
     Class<?>[] groups() default { };

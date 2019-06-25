@@ -2,17 +2,3 @@ spring:
   profiles:
     active: db
 
-  #配置redis
-  redis:
-    host: 94.191.56.213
-    port: 6379
-    password: mqslovelry
-    database: 0
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1ms
-        max-idle: 5
-        min-idle: 0
-    timeout: 10000ms
-

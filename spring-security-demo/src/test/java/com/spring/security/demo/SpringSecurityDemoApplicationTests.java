@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,6 +25,9 @@ public class SpringSecurityDemoApplicationTests {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Before
     public void setup(){
@@ -99,5 +103,16 @@ public class SpringSecurityDemoApplicationTests {
     public void whenDeleteSuccess() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.delete("/user/deleteUser/1").contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    /**
+     * 用来测试Redis的
+     */
+    @Test
+    public void testRedis(){
+        stringRedisTemplate.opsForValue().set("test", "test value");
+
+        String test = stringRedisTemplate.opsForValue().get("test");
+        System.out.println(test);
     }
 }

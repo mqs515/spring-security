@@ -45,6 +45,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     private MyUserDetailsService userDetailsService;
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
     /**
      * 记住我会将token放入数据库
@@ -75,7 +77,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         //设置登录,注销，表单登录不用拦截，其他请求要拦截
 //        http.httpBasic()
         // 登陆以后直接进入的登陆页面
-        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+        http.apply(validateCodeSecurityConfig)
+                .and()
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                     .loginPage("/authentication/require")
                     // 用户登录请求的action

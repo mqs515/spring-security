@@ -1,8 +1,10 @@
 package com.spring.security.demo.test;
 
 import com.spring.security.core.service.UserService;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisShardInfo;
 
@@ -25,6 +27,10 @@ public class TestRedis {
             Jedis jedis = new Jedis(jedisShardInfo);
             System.out.println("连接成功");
             //设置 redis 字符串数据
+            String emooco = jedis.get("emooco");
+            if (StringUtils.isNotBlank(emooco)){
+                return;
+            }
             jedis.set("emooco", "www.emooco.com");
             // 获取存储的数据并输出
             System.out.println("redis 存储的字符串为: "+ jedis.get("emooco"));
@@ -42,4 +48,5 @@ public class TestRedis {
         System.out.println(i%t);
         System.out.println(i/t);
     }
+
 }

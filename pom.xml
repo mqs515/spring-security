@@ -77,66 +77,76 @@
                 <artifactId>spring-social-config</artifactId>
                 <version>${spring-social-config}</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.springframework.social/spring-social-core -->
             <dependency>
                 <groupId>org.springframework.social</groupId>
                 <artifactId>spring-social-core</artifactId>
                 <version>1.1.6.RELEASE</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.springframework.social/spring-social-security -->
             <dependency>
                 <groupId>org.springframework.social</groupId>
                 <artifactId>spring-social-security</artifactId>
                 <version>1.1.6.RELEASE</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.springframework.social/spring-social-web -->
             <dependency>
                 <groupId>org.springframework.social</groupId>
                 <artifactId>spring-social-web</artifactId>
                 <version>1.1.6.RELEASE</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
             <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>2.6</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>1.9.3</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>4.2</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-oauth2 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-oauth2</artifactId>
                 <version>2.0.1.RELEASE</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session -->
             <dependency>
                 <groupId>org.springframework.session</groupId>
                 <artifactId>spring-session</artifactId>
                 <version>1.3.4.RELEASE</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-aop</artifactId>
                 <version>${spring.boot.aop.version}</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-starter-data-redis</artifactId>-->
-<!--                <version>2.1.5.RELEASE</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>2.1.5.RELEASE</version>
+            </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf -->
             <dependency>
