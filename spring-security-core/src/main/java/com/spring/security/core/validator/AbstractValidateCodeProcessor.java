@@ -86,6 +86,10 @@ public abstract class  AbstractValidateCodeProcessor<C extends ValidateCode> imp
      */
     protected abstract void send(ServletWebRequest request, C validateCode) throws Exception;
 
+    /**
+     * 验证登陆信息
+     * @param request
+     */
     @Override
     public void validate(ServletWebRequest request) {
 
