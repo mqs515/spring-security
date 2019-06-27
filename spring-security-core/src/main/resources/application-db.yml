@@ -2,8 +2,8 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://sh-cdb-2mfz9xuq.sql.tencentcdb.com:61987/spring_security?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&verifyServerCertificate=false&useSSL=false
-    username: root
+    url: jdbc:mysql://mysql57.rdsmqiufsrxjczw.rds.bj.baidubce.com:3306/spring_security?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&verifyServerCertificate=false&useSSL=false
+    username: rdsroot
     password: Miao123456
 
 

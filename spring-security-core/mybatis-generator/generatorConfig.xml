@@ -27,8 +27,8 @@
 
         <!--数据库连接信息-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://sh-cdb-2mfz9xuq.sql.tencentcdb.com:61987/spring_security?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;verifyServerCertificate=false&amp;useSSL=false"
-                        userId="root"
+                        connectionURL="jdbc:mysql://mysql57.rdsmqiufsrxjczw.rds.bj.baidubce.com:3306/spring_security?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;verifyServerCertificate=false&amp;useSSL=false"
+                        userId="rdsroot"
                         password="Miao123456"/>
 
 
@@ -37,7 +37,7 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.spring.security.core.dao"
                              targetProject="src/main/java"/>
         <!--表名-->
-        <table tableName="item_category" domainObjectName="itemCategory">
+        <table tableName="item_category" domainObjectName="ItemCategory">
             <property name="versionColumn" value="version"/>
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
